@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Training_exercise extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'name',
+    ];
+
+
+    public function progress_weight() {
+        return $this->hasMany(Progress_weight::class);
+    }
 }
+

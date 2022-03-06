@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Body_weight extends Model
+class Role extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'weight'
+        'name'
     ];
 
+
     public function user() {
-        return $this->hasOne(User::class);
+        return $this->hasMany(User::class);
     }
 }
