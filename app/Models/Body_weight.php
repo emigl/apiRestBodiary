@@ -12,7 +12,7 @@ class Body_weight extends Model
     protected $fillable = [
         'weight'
     ];
-
+    // Relationships
     public function user() {
         return $this->hasOne(User::class);
     }
