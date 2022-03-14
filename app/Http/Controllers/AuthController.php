@@ -12,7 +12,7 @@ use Laravel\Sanctum\NewAccessToken;
 class AuthController extends Controller
 {
     /**
-     * TODO: Realizar la comprobación del si existe un usuario y un email y devolver feedback acerca del registro.
+     * TODO: Realizar la comprobación de la longitud del password, mínimo 8 caracteres.
      */
     public function signUp(Request $request)
     {
@@ -20,10 +20,26 @@ class AuthController extends Controller
             
             $request->validate([
                 'name' => 'required|string',
-                'email' => 'required|string|email|unique:users',
+                'email' => 'required|string|email',
                 'password' => 'required|string'
             ]);
-    
+            $userVerify = User::where('name', $request->name)->get();
+            if(count($userVerify)){
+                return response()->json([
+                    'message' => 'El nombre de usuario ya existe!',
+                    'response' => $userVerify,                              
+                    'name' => $request->name,
+                    
+                ], 400);
+            }
+            $emailVerify = User::where('email', $request->email)->get();
+            if(count($emailVerify)){
+                return response()->json([
+                    'message' => 'El email ya está siendo utilizado!',                              
+                    'name' => $request->email,
+                    
+                ], 400);
+            }
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -74,7 +90,7 @@ class AuthController extends Controller
     
             
             if ($request->remember_me){
-                $token->expires_at = Carbon::now()->addWeeks(2);
+                $token->expires_at = Carbon::now()->addWeeks(1);
             }
             // $token->save();
     
