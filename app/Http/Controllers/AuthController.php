@@ -23,6 +23,7 @@ class AuthController extends Controller
                 'email' => 'required|string|email',
                 'password' => 'required|string'
             ]);
+
             $userVerify = User::where('name', $request->name)->get();
             if(count($userVerify)){
                 return response()->json([
@@ -32,6 +33,7 @@ class AuthController extends Controller
                     
                 ], 400);
             }
+
             $emailVerify = User::where('email', $request->email)->get();
             if(count($emailVerify)){
                 return response()->json([
@@ -40,6 +42,7 @@ class AuthController extends Controller
                     
                 ], 400);
             }
+
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -84,6 +87,7 @@ class AuthController extends Controller
             }
 
             $user = User::where('email', $request['email'])->firstOrFail();
+
             $user = $request->user();
 
             $token = $user->createToken('auth_token');
@@ -97,7 +101,8 @@ class AuthController extends Controller
             return response()->json([
                 'access_token' => $token->plainTextToken,
                 'token_type' => 'Bearer',
-                'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString()
+                // 'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString(),
+                'token_info' => $token
             ]);
             
         } catch (Exception $th) {
