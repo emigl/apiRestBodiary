@@ -15,8 +15,6 @@ return new class extends Migration
     {
         Schema::create('progress_weight', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('training_exercise_id')->constrained();
             $table->float('weight');
             $table->timestamps();
         });

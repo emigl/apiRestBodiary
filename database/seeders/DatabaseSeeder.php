@@ -16,13 +16,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
         DB::table('roles')->insert([
             'name' => 'admin', 
         ]);
         DB::table('roles')->insert([
             'name' => 'client',
         ]);
+        \App\Models\User::factory(1)->create();
         // Comprobar los seeders para ver si se puede usar RoleSeeder, si hay tiempo.
     }
 }

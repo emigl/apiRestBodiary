@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('body_imcs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
             $table->float('imc')->nullable();
             $table->timestamps();
         });
