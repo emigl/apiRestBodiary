@@ -45,6 +45,7 @@ class AuthController extends Controller
 
             $user = User::create([
                 'name' => $request->name,
+                'role_id' => 2,
                 'email' => $request->email,
                 'password' => bcrypt($request->password)
             ]);
@@ -59,9 +60,9 @@ class AuthController extends Controller
                 
             ], 201);
 
-        } catch (Exception $th) {
+        } catch (Exception $ex) {
             return response()->json([
-                'message' => $th
+                'message' => $ex
             ], 400);
         }
     }
@@ -89,20 +90,20 @@ class AuthController extends Controller
             $user = User::where('email', $request['email'])->firstOrFail();
 
             $user = $request->user();
-
             $token = $user->createToken('auth_token');
-    
+            
             
             if ($request->remember_me){
                 $token->expires_at = Carbon::now()->addWeeks(1);
             }
             // $token->save();
-    
+
             return response()->json([
                 'access_token' => $token->plainTextToken,
                 'token_type' => 'Bearer',
                 // 'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString(),
-                'token_info' => $token
+                // 'token_info' => $token
+                'role' => $user->role_id
             ]);
             
         } catch (Exception $th) {
