@@ -13,20 +13,24 @@ return new class extends Migration
      */
     public function up()
     {
+        
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('role_id')->after('id')->references('id')->on('roles')->OnDelete('cascade');
+            $table->foreignId('role_id')->after('id')->constrained()->OnDelete('cascade');
         });
+
         Schema::table('body_imcs', function (Blueprint $table) {
             $table->foreignId('user_id')->after('id')->constrained()->onDelete('cascade');
         });
+
         Schema::table('body_weights', function (Blueprint $table) {
             $table->foreignId('user_id')->after('id')->constrained()->onDelete('cascade');
         });
+
         Schema::table('progress_weight', function (Blueprint $table) {
             $table->foreignId('user_id')->after('id')->constrained()->onDelete('cascade');
             $table->foreignId('training_exercise_id')->after('id')->constrained()->onDelete('cascade');
         });
-        // Seguir creando las foreign key de las demás tablas, comprobar si funcionan dos Schema en la función up()
+    
     }
 
     /**
