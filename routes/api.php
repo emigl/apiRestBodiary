@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
@@ -40,20 +38,18 @@ Route::group([
 
 Route::group([
     'middleware' => 'cors',
+    // TODO: agregar el middleware auth:sanctum cuando esté el front listo.
+     //   'middleware' => 'auth:sanctum'
     'prefix' => 'admin'
 ], function () {
-    Route::post('createUser', 'AdminController@createUser');
-    Route::get('getUsers', 'AdminController@getUsers');
-    Route::get('getUserById/{id}', 'AdminController@showUserDetails');
-    Route::put('updateUser/{id}', 'AdminController@updateUser');
-    Route::delete('deleteUser/{id}', 'AdminController@deleteUser');
-    Route::put('activeUser/{id}', 'AdminController@activeUser');
 
+        Route::post('createUser', 'AdminController@createUser');
+        Route::get('getUsers', 'AdminController@getUsers');
 
+        Route::get('getUserById/{id}', 'AdminController@showUserDetails');
+        Route::put('updateUser/{id}', 'AdminController@updateUser');
 
-    // Route::group([
-    //   'middleware' => 'auth:sanctum'
-    // ], function() {
-    //     Route::get('logout', 'AuthController@logout');
-    //     Route::get('user', 'AuthController@user');
+        Route::delete('deleteUser/{id}', 'AdminController@deleteUser');
+        Route::put('activeUser/{id}', 'AdminController@activeUser');
+
     });
