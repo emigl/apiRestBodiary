@@ -35,3 +35,25 @@ Route::group([
         Route::get('user', 'AuthController@user');
     });
 });
+
+// Routes for admin control panel
+
+Route::group([
+    'middleware' => 'cors',
+    'prefix' => 'admin'
+], function () {
+    Route::post('createUser', 'AdminController@createUser');
+    Route::get('getUsers', 'AdminController@getUsers');
+    Route::get('getUserById/{id}', 'AdminController@showUserDetails');
+    Route::put('updateUser/{id}', 'AdminController@updateUser');
+    Route::delete('deleteUser/{id}', 'AdminController@deleteUser');
+    Route::put('activeUser/{id}', 'AdminController@activeUser');
+
+
+
+    // Route::group([
+    //   'middleware' => 'auth:sanctum'
+    // ], function() {
+    //     Route::get('logout', 'AuthController@logout');
+    //     Route::get('user', 'AuthController@user');
+    });
