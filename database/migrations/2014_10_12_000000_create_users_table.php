@@ -20,6 +20,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->integer('age')->unsigned()->nullable();
             $table->string('password');
+            $table->boolean('isActive')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });
