@@ -11,9 +11,7 @@ use Laravel\Sanctum\NewAccessToken;
 
 class AuthController extends Controller
 {
-    /**
-     * TODO: Realizar la comprobación de la longitud del password, mínimo 8 caracteres.
-     */
+    
     public function signUp(Request $request)
     {
         try {
@@ -27,7 +25,7 @@ class AuthController extends Controller
             $userVerify = User::where('name', $request->name)->get();
             if(count($userVerify)){
                 return response()->json([
-                    'message' => 'El nombre de usuario ya existe!',
+                    'error' => 'El nombre de usuario ya existe!',
                     'response' => $userVerify,                              
                     'name' => $request->name,
                     
@@ -37,8 +35,8 @@ class AuthController extends Controller
             $emailVerify = User::where('email', $request->email)->get();
             if(count($emailVerify)){
                 return response()->json([
-                    'message' => 'El email ya está siendo utilizado!',                              
-                    'name' => $request->email,
+                    'error' => 'El email ya está siendo utilizado!',                              
+                    'email' => $request->email,
                     
                 ], 400);
             }
@@ -53,7 +51,7 @@ class AuthController extends Controller
             $token = $user->createToken('auth_token')->plainTextToken;
     
             return response()->json([
-                'message' => 'Successfully created user!',
+                'ok' => 'Se ha creado el usuario!',
                 'access_token' => $token,
                 'token_type' => 'Bearer',
                 'user' => $user,
@@ -62,7 +60,7 @@ class AuthController extends Controller
 
         } catch (Exception $ex) {
             return response()->json([
-                'message' => $ex
+                'error' => $ex
             ], 400);
         }
     }
@@ -83,7 +81,7 @@ class AuthController extends Controller
     
             if (!Auth::attempt($credentials)){
                 return response()->json([
-                    'message' => 'Las credenciales no son válidas'
+                    'error' => 'Las credenciales no son válidas'
                 ], 401);
             }
 
@@ -101,14 +99,14 @@ class AuthController extends Controller
             return response()->json([
                 'access_token' => $token->plainTextToken,
                 'token_type' => 'Bearer',
+                'role' => $user->role_id
                 // 'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString(),
                 // 'token_info' => $token
-                'role' => $user->role_id
             ]);
             
-        } catch (Exception $th) {
+        } catch (Exception $ex) {
             return response()->json([
-                'message' => $th
+                'error' => $ex
             ], 400);
         }
     }
@@ -123,11 +121,11 @@ class AuthController extends Controller
             $request->user()->token()->revoke();
     
             return response()->json([
-                'message' => 'Successfully logged out'
+                'ok' => 'Se ha cerrado la sesión'
             ]);
-        } catch (Exception $th) {
+        } catch (Exception $ex) {
             return response()->json([
-                'message' => $th
+                'error' => $ex
             ], 400);
         }
     }
@@ -140,9 +138,9 @@ class AuthController extends Controller
         try {
             
             return response()->json($request->user());
-        } catch (Exception $th) {
+        } catch (Exception $ex) {
             return response()->json([
-                'message' => $th
+                'error' => $ex
             ], 400);
         }
     }
