@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class AdminController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a list of users.
      *
      * @return \Illuminate\Http\Response
      */
@@ -21,11 +21,7 @@ class AdminController extends Controller
             
             $users = User::all()->except(Auth::id());
 
-            return response()->json([
-                        $users,
-                        'ok' => 'Se han traído los usuarios con éxito'
-                    ]
-            );
+            return response()->json($users);
         } catch (Exception $ex) {
             return response()->json([
                 'error' => $ex
@@ -102,10 +98,7 @@ class AdminController extends Controller
     {
         try {
             $user = User::where('id', $id)->get();
-            return response()->json([
-                $user,
-                'ok' => 'Se muestran los detalles del usuario con exito'
-            ]);
+            return response()->json($user);
         } catch (Exception $ex) {
             return response()->json([
                 'error' => $ex
@@ -126,38 +119,38 @@ class AdminController extends Controller
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|email',
-            'password' => 'required|string'
+            'isActive' => 'required'
         ]);
         try {
             
             $userVerify = User::where('name', $request->name)->get();
             if(count($userVerify)){
-                return response()->json([
-                    'error' => 'El nombre de usuario ya existe!',                   
-                    'name' => $request->name,
+            $userVerifyId = User::where('id', $request->id)->get();
+                if($userVerify == $userVerifyId){
                     
-                ], 400);
+                    
+                }else{
+
+                    return response()->json([
+                        'error' => 'El nombre de usuario ya existe!',                   
+                        'name' => $request->name,
+                        
+                    ], 400);
+
+                }
             }
     
-            $emailVerify = User::where('email', $request->email)->get();
-            if(count($emailVerify)){
-                return response()->json([
-                    'error' => 'El email ya está siendo utilizado!',                              
-                    'email' => $request->email,
-                    
-                ], 400);
-            }
-    
-            $user = User::where('id', $id)->update([
+           
+            User::where('id', $id)->update([
                 'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($request->password)
+                'isActive' => $request->isActive
             ]);
             return response()->json([
                 
                 'ok'=> 'El usuario ha sido actualizado con éxito',
                 
             ], 201);
+           
             
         } catch (Exception $ex) {
             return response()->json([
@@ -168,7 +161,7 @@ class AdminController extends Controller
         }
     }
 
-    /**
+     /**
      * Soft Delete the specified user from database.
      *
      * @param  int  $id
@@ -177,12 +170,9 @@ class AdminController extends Controller
     public function deleteUser($id)
     {
         try {
-            $user = User::where('id', $id)->update([
-                'isActive' => 0
-            ]);
+            $user = User::where('id', $id)->delete();
             if($user == 1){
                 return response()->json([
-                    'user' => $user,
                     'ok' => 'El usuario ha sido borrado con éxito',
                 ]);
 
@@ -202,6 +192,40 @@ class AdminController extends Controller
             ], 400);
         }
     }
+
+    /**
+     * Soft Delete the specified user from database.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function disableUser($id)
+    {
+        try {
+            $user = User::where('id', $id)->update([
+                'isActive' => 0
+            ]);
+            if($user == 1){
+                return response()->json([
+                    'ok' => 'El usuario ha sido desactivado con éxito',
+                ]);
+
+            }
+            else {
+                return response()->json([
+                    
+                    'error' => 'No se ha encontrado el usuario',
+                ]);
+
+            }
+        } catch (Exception $ex) {
+            return response()->json([
+                'error' => 'Ha ocurrido un error al intentar desactivado el usuario',
+                'exception' => $ex
+            ], 400);
+        }
+    }
+
     /**
      * Active the specified user from database.
      *

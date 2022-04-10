@@ -49,7 +49,8 @@ Route::group([
         Route::get('getUserById/{id}', 'AdminController@showUserDetails');
         Route::put('updateUser/{id}', 'AdminController@updateUser');
 
-        Route::delete('deleteUser/{id}', 'AdminController@deleteUser');
+        Route::put('disableUser/{id}', 'AdminController@disableUser');
         Route::put('activeUser/{id}', 'AdminController@activeUser');
-
+        Route::delete('deleteUser/{id}', 'AdminController@deleteUser');
+        
     });
