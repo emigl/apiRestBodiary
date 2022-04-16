@@ -99,9 +99,8 @@ class AuthController extends Controller
             return response()->json([
                 'access_token' => $token->plainTextToken,
                 'token_type' => 'Bearer',
-                'role' => $user->role_id
-                // 'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString(),
-                // 'token_info' => $token
+                'role' => $user->role_id,
+                'user' => $user
             ]);
             
         } catch (Exception $ex) {
@@ -118,14 +117,16 @@ class AuthController extends Controller
     {
         try {
             
-            $request->user()->token()->revoke();
+            $request->user()->currentAccessToken()->delete();
     
             return response()->json([
-                'ok' => 'Se ha cerrado la sesión'
+                'ok' => 'Se ha cerrado la sesión con éxito.',
+                $request->user()
             ]);
         } catch (Exception $ex) {
             return response()->json([
-                'error' => $ex
+                'error' => $ex,
+                $request->user()
             ], 400);
         }
     }

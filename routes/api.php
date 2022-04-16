@@ -29,7 +29,7 @@ Route::group([
     Route::group([
       'middleware' => 'auth:sanctum'
     ], function() {
-        Route::get('logout', 'AuthController@logout');
+        Route::post('logout', 'AuthController@logout');
         Route::get('user', 'AuthController@user');
     });
 });
@@ -54,3 +54,23 @@ Route::group([
         Route::delete('deleteUser/{id}', 'AdminController@deleteUser');
         
     });
+
+    Route::group([
+        'middleware' => 'cors',
+        // TODO: agregar el middleware auth:sanctum cuando esté el front listo.
+         //   'middleware' => 'auth:sanctum'
+        'prefix' => 'dashboard'
+    ], function () {
+    
+            Route::post('createWorkoutRegister', 'WorkoutController@createUser');
+            Route::get('getWorkoutRegister', 'WorkoutController@getWorkoutRegister');
+
+            Route::post('createBodyWeightRegister', 'WorkoutController@createBodyWeightRegister');
+            Route::get('getBodyWeightRegister', 'WorkoutController@getBodyWeightRegister');
+
+            Route::post('createImcRegister', 'WorkoutController@createImcRegister');
+            Route::get('getImcRegister', 'WorkoutController@getImcRegister');
+    
+            
+            
+        });

@@ -17,8 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 80);
             $table->string('muscle', 80)->nullable();
-            $table->integer('reps')->nullable();
-            $table->integer('sets')->nullable();
+            
             $table->timestamps();
         });
     }

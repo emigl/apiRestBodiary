@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('progress_weight', function (Blueprint $table) {
             $table->id();
             $table->float('weight');
+            $table->integer('reps')->nullable();
+            $table->integer('sets')->nullable();
             $table->timestamps();
         });
     }
