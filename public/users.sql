@@ -26,7 +26,6 @@ SET time_zone = "+00:00";
 --
 
 INSERT INTO `users` (`id`, `role_id`, `name`, `email`, `email_verified_at`, `age`, `password`, `isActive`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 1, 'bodiadmin', 'admin@bodiary.com', '2022-04-13 13:30:40', NULL, '$2a$12$mdV2ldXyVpjYQ/.7q2JhYeRhLanZd0rjhijynykjZrppTsrKgDT4m', 1, 'Pi8e0T2cAH', '2022-04-13 13:30:40', '2022-04-13 13:30:40'),
 (2, 2, 'emi', 'emi@gmail.com', NULL, NULL, '$2y$10$5Q/4U2/p9pGSh1kHhMO4BuVZFeVTyWVgvgN6XfJBVUCqBPwsCD.26', 1, NULL, '2022-04-16 14:59:32', '2022-04-16 14:59:32'),
 (3, 2, 'Antonio', 'antonio@gmail.com', NULL, NULL, '$2y$10$We4rtNvwkgvnvFU98LggTu86mORN82TO.sei/vhRnWCf2jR2PPLlW', 1, NULL, '2022-04-16 14:59:47', '2022-04-16 14:59:47'),
 (4, 2, 'Alberto', 'alberto@gmail.com', NULL, NULL, '$2y$10$E4BXn2/smeCEUTh2dNgIDO3/dlaPW4ODNkIdRbOkiIkrRSzZJ4/im', 1, NULL, '2022-04-16 14:59:59', '2022-04-16 14:59:59'),

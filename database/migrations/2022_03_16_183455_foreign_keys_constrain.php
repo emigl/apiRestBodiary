@@ -26,7 +26,7 @@ return new class extends Migration
             $table->foreignId('user_id')->after('id')->constrained()->onDelete('cascade');
         });
 
-        Schema::table('progress_weight', function (Blueprint $table) {
+        Schema::table('progress_weights', function (Blueprint $table) {
             $table->foreignId('user_id')->after('id')->constrained()->onDelete('cascade');
             $table->foreignId('training_exercise_id')->after('id')->constrained()->onDelete('cascade');
         });

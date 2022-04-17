@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('progress_weight', function (Blueprint $table) {
+        Schema::create('progress_weights', function (Blueprint $table) {
             $table->id();
             $table->float('weight');
             $table->integer('reps')->nullable();
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('progress_weight');
+        Schema::dropIfExists('progress_weights');
     }
 };
