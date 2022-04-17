@@ -10,6 +10,7 @@ class Training_exercise extends Model
     use HasFactory;
     protected $fillable = [
         'name',
+        'muscle'
     ];
 
 

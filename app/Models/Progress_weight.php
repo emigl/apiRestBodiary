@@ -9,6 +9,8 @@ class Progress_weight extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'training_exercise_id',
+        'user_id',
         'weight',
         'reps',
         'sets',

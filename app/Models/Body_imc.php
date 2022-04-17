@@ -9,7 +9,10 @@ class Body_imc extends Model
 {
     use HasFactory;
     
-
+    protected $fillable = [
+        'user_id',
+        'imc'
+    ];
     
     //Relationships
     

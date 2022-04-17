@@ -55,6 +55,7 @@ Route::group([
         
     });
 
+    // Routes for Dashboard
     Route::group([
         'middleware' => 'cors',
         // TODO: agregar el middleware auth:sanctum cuando esté el front listo.
@@ -62,8 +63,9 @@ Route::group([
         'prefix' => 'dashboard'
     ], function () {
     
-            Route::post('createWorkoutRegister', 'WorkoutController@createUser');
+            Route::post('createWorkoutRegister', 'WorkoutController@createWorkoutRegister');
             Route::get('getWorkoutRegister', 'WorkoutController@getWorkoutRegister');
+            Route::get('getTrainingExercises', 'WorkoutController@getTrainingExercises');
 
             Route::post('createBodyWeightRegister', 'WorkoutController@createBodyWeightRegister');
             Route::get('getBodyWeightRegister', 'WorkoutController@getBodyWeightRegister');

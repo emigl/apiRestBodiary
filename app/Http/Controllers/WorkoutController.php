@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Body_imc;
+use App\Models\Body_weight;
+use App\Models\Progress_weight;
+use App\Models\Training_exercise;
 use App\Models\User;
+use Carbon\Exceptions\Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class WorkoutController extends Controller
 {
@@ -16,10 +23,28 @@ class WorkoutController extends Controller
      */
     public function createWorkoutRegister(Request $request)
     {
-        // TODO: Hay que hacer un algoritmo que recoja la ID del usuario que cree el registro. Después en la request debe de ir lo siguiente: Músculo(muscle en training_exercises), sets, reps, peso.
-        $user = User::where('id', 2)->firstOrFail();
-        
-        // TODO: la Lógica del algoritmo es el siguiente: usa el ID del usuario para introducirlo en progress_weight. Hace una consulta a Training_exercises para ver que ID tiene el ejercicio que se ha puesto, para después ponerlo en la foreign key de progress_weight. Una vez hecho esto, se hace una consulta de crear un registro en progress_weight con la información que tenemos, ya que tenemos la ID del usuario y el ID del ejercicio de training_exercises.
+        try {
+            // usar esta variable cuando se pase el middleware de sanctum.
+            $userId = Auth::id();
+            // DE PRUEBA
+            $user = User::where('id', 3)->firstOrFail();
+    
+            $trainingExercise = Training_exercise::where('name', $request->name)->firstOrFail();
+            $registerWorkout = Progress_weight::create([
+                                'training_exercise_id' => $trainingExercise->id,
+                                'user_id' => $user->id,
+                                'weight' => $request->weight,
+                                'sets' => $request->sets,
+                                'reps' => $request->reps
+                                ]);
+    
+            return response()->json($registerWorkout);
+
+        } catch (Exception $ex) {
+            return response()->json([
+                'error' => $ex
+            ], 400);
+        }
     }
 
     /**
@@ -29,7 +54,45 @@ class WorkoutController extends Controller
      */
     public function getWorkoutRegister()
     {
+
+        try{
+            //  TODO: tengo que controllar que la consulta sea para el usuario que esté loggeado, agregando un where en la consulta que está hecha, o en una consulta a parte hacerlo de otra manera.
+            $registerWorkouts = DB::table('progress_weights')
+            ->join('training_exercises', 'progress_weights.training_exercise_id', '=','training_exercises.id' )->select('progress_weights.weight', 'progress_weights.reps','progress_weights.sets', 'progress_weights.created_at','progress_weights.user_id','training_exercises.name')->get();
+            if(empty($registerWorkouts->count())){
+
+                return response()->json(['empty'=> 'No hay registros todavía!']);
+
+             }else{
+
+                return response()->json($registerWorkouts);
+             }
         
+
+        } catch (Exception $ex) {
+            return response()->json([
+                'error' => $ex
+            ], 400);
+        }
+    }
+
+    /**
+     * Display a listing of training exercises register for filter.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getTrainingExercises()
+    {
+        try{
+            $trainingExercises = Training_exercise::all();
+            
+            return response()->json($trainingExercises);
+
+        } catch (Exception $ex) {
+            return response()->json([
+                'error' => $ex
+            ], 400);
+        }
     }
 
     
@@ -42,17 +105,56 @@ class WorkoutController extends Controller
      */
     public function createBodyWeightRegister(Request $request)
     {
-        
+
+        try{
+            // usar esta variable cuando se pase el middleware de sanctum.
+            $userId = Auth::id();
+           // DE PRUEBA
+            $user = User::where('id', 2)->firstOrFail();
+   
+            $registerBodyWeight = Body_weight::create([
+                                'user_id' => $user->id,
+                                'weight' => $request->weight,
+                                ]);
+            
+
+            return response()->json($registerBodyWeight);
+
+        } catch (Exception $ex) {
+            return response()->json([
+                'error' => $ex
+            ], 400);
+        }
     }
 
     /**
-     * Display a listing of body weight register.
+     * Display a listing of body weight registers.
      *
      * @return \Illuminate\Http\Response
      */
     public function getBodyWeightRegister()
     {
-        
+        try{
+            // usar esta variable cuando se pase el middleware de sanctum.
+            $userId = Auth::id();
+            // DE PRUEBA
+            $user = User::where('id', 2)->firstOrFail();
+     
+             $trainingExercises = Body_weight::where('user_id', $user->id)->get();
+             if(empty($trainingExercises->count())){
+
+                return response()->json(['empty'=> 'No has introducido tu peso todavía!']);
+                
+             }else{
+
+                 return response()->json($trainingExercises);
+             }
+
+        } catch (Exception $ex) {
+            return response()->json([
+                'error' => $ex
+            ], 400);
+        }
     }
     
 
@@ -64,7 +166,24 @@ class WorkoutController extends Controller
      */
     public function createImcRegister(Request $request)
     {
-        
+        try{
+            // usar esta variable cuando se pase el middleware de sanctum.
+            $userId = Auth::id();
+           // DE PRUEBA
+            $user = User::where('id', 2)->firstOrFail();
+   
+            $registerImc = Body_imc::create([
+                                'user_id' => $user->id,
+                                'imc' => $request->imc,
+                                ]);
+    
+            return response()->json($registerImc);
+
+        } catch (Exception $ex) {
+            return response()->json([
+                'error' => $ex
+            ], 400);
+        }
     }
 
     /**
@@ -74,7 +193,28 @@ class WorkoutController extends Controller
      */
     public function getImcRegister()
     {
-        
+        try{
+            // usar esta variable cuando se pase el middleware de sanctum.
+            $userId = Auth::id();
+            // DE PRUEBA
+            $user = User::where('id', 2)->firstOrFail();
+     
+             $imcRegister = Body_weight::where('user_id', $user->id)->get();
+             if(empty($imcRegister->count())){
+
+                return response()->json(['empty'=> 'No hay datos para calcular tu imc todavía!']);
+                
+             }else{
+
+                 return response()->json($imcRegister);
+
+             }
+
+        } catch (Exception $ex) {
+            return response()->json([
+                'error' => $ex
+            ], 400);
+        }
     }
 
     
@@ -88,6 +228,13 @@ class WorkoutController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+
+            
+        } catch (Exception $ex) {
+            return response()->json([
+                'error' => $ex
+            ], 400);
+        }
     }
 }
