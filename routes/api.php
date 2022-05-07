@@ -37,9 +37,7 @@ Route::group([
 // Routes for admin control panel
 
 Route::group([
-    'middleware' => 'cors',
-    // TODO: agregar el middleware auth:sanctum cuando esté el front listo.
-     //   'middleware' => 'auth:sanctum'
+    'middleware' => ['cors','auth:sanctum'],
     'prefix' => 'admin'
 ], function () {
 
@@ -57,9 +55,7 @@ Route::group([
 
     // Routes for Dashboard
     Route::group([
-        'middleware' => 'cors',
-        // TODO: agregar el middleware auth:sanctum cuando esté el front listo.
-         //   'middleware' => 'auth:sanctum'
+        'middleware' => ['cors','auth:sanctum'],
         'prefix' => 'dashboard'
     ], function () {
     

@@ -11,7 +11,11 @@ use Laravel\Sanctum\NewAccessToken;
 
 class AuthController extends Controller
 {
-    
+    /**
+     * Metodo que registra a un usuario
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function signUp(Request $request)
     {
         try {
@@ -67,6 +71,8 @@ class AuthController extends Controller
 
     /**
      * Inicio de sesión y creación de token
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function login(Request $request)
     {
@@ -92,9 +98,9 @@ class AuthController extends Controller
             
             
             if ($request->remember_me){
-                $token->expires_at = Carbon::now()->addWeeks(1);
+                $token->expires_at = Carbon::now()->addCentury();
             }
-            // $token->save();
+            
 
             return response()->json([
                 'access_token' => $token->plainTextToken,
@@ -112,11 +118,12 @@ class AuthController extends Controller
 
     /**
      * Cierre de sesión (anular el token)
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function logout(Request $request)
     {
         try {
-            
             $request->user()->currentAccessToken()->delete();
     
             return response()->json([
@@ -133,11 +140,12 @@ class AuthController extends Controller
 
     /**
      * Obtener el objeto User como json
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function user(Request $request)
     {
         try {
-            
             return response()->json($request->user());
         } catch (Exception $ex) {
             return response()->json([

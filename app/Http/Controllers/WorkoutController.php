@@ -27,12 +27,12 @@ class WorkoutController extends Controller
             // usar esta variable cuando se pase el middleware de sanctum.
             $userId = Auth::id();
             // DE PRUEBA
-            $user = User::where('id', 3)->firstOrFail();
+            $user = User::where('id', 2)->firstOrFail();
     
             $trainingExercise = Training_exercise::where('name', $request->name)->firstOrFail();
             $registerWorkout = Progress_weight::create([
                                 'training_exercise_id' => $trainingExercise->id,
-                                'user_id' => $user->id,
+                                'user_id' => $userId,
                                 'weight' => $request->weight,
                                 'sets' => $request->sets,
                                 'reps' => $request->reps
@@ -56,11 +56,15 @@ class WorkoutController extends Controller
     {
 
         try{
-            //  TODO: tengo que controllar que la consulta sea para el usuario que esté loggeado, agregando un where en la consulta que está hecha, o en una consulta a parte hacerlo de otra manera.
+            $userId = Auth::id();
+           
             $registerWorkouts = DB::table('progress_weights')
-            ->join('training_exercises', 'progress_weights.training_exercise_id', '=','training_exercises.id' )->select('progress_weights.weight', 'progress_weights.reps','progress_weights.sets', 'progress_weights.created_at','progress_weights.user_id','training_exercises.name')->get();
+            ->join('training_exercises', 'progress_weights.training_exercise_id', '=','training_exercises.id' )->select('progress_weights.weight', 'progress_weights.reps','progress_weights.sets', 'progress_weights.created_at','progress_weights.user_id','training_exercises.name')
+            ->where('progress_weights.user_id', '=', $userId)
+            ->orderBy('progress_weights.created_at', 'desc')->get();
             if(empty($registerWorkouts->count())){
 
+                
                 return response()->json(['empty'=> 'No hay registros todavía!']);
 
              }else{
@@ -113,7 +117,7 @@ class WorkoutController extends Controller
             $user = User::where('id', 2)->firstOrFail();
    
             $registerBodyWeight = Body_weight::create([
-                                'user_id' => $user->id,
+                                'user_id' => $userId,
                                 'weight' => $request->weight,
                                 ]);
             
@@ -140,7 +144,7 @@ class WorkoutController extends Controller
             // DE PRUEBA
             $user = User::where('id', 2)->firstOrFail();
      
-             $trainingExercises = Body_weight::where('user_id', $user->id)->get();
+             $trainingExercises = Body_weight::where('user_id', $userId)->orderBy('created_at', 'desc')->get();
              if(empty($trainingExercises->count())){
 
                 return response()->json(['empty'=> 'No has introducido tu peso todavía!']);
@@ -173,7 +177,7 @@ class WorkoutController extends Controller
             $user = User::where('id', 2)->firstOrFail();
    
             $registerImc = Body_imc::create([
-                                'user_id' => $user->id,
+                                'user_id' => $userId,
                                 'imc' => $request->imc,
                                 ]);
     
@@ -199,7 +203,7 @@ class WorkoutController extends Controller
             // DE PRUEBA
             $user = User::where('id', 2)->firstOrFail();
      
-             $imcRegister = Body_weight::where('user_id', $user->id)->get();
+             $imcRegister = Body_imc::where('user_id', $userId)->orderBy('created_at', 'desc')->get();
              if(empty($imcRegister->count())){
 
                 return response()->json(['empty'=> 'No hay datos para calcular tu imc todavía!']);
@@ -210,27 +214,6 @@ class WorkoutController extends Controller
 
              }
 
-        } catch (Exception $ex) {
-            return response()->json([
-                'error' => $ex
-            ], 400);
-        }
-    }
-
-    
-
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        try{
-
-            
         } catch (Exception $ex) {
             return response()->json([
                 'error' => $ex
