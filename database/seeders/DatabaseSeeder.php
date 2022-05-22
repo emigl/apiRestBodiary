@@ -29,8 +29,6 @@ class DatabaseSeeder extends Seeder
         // User Admin
         \App\Models\User::factory(1)->create();
 
-        // Comprobar los seeders para ver si se puede usar RoleSeeder, si hay tiempo.
-
         // DATOS DE PRUEBA
         $sqlUsers = public_path('users.sql');
         $sqlExercises = public_path('training_exercises.sql');
