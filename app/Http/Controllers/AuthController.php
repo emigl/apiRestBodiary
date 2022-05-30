@@ -26,16 +26,6 @@ class AuthController extends Controller
                 'password' => 'required|string'
             ]);
 
-            $userVerify = User::where('name', $request->name)->get();
-            if(count($userVerify)){
-                return response()->json([
-                    'error' => 'El nombre de usuario ya existe!',
-                    'response' => $userVerify,                              
-                    'name' => $request->name,
-                    
-                ], 400);
-            }
-
             $emailVerify = User::where('email', $request->email)->get();
             if(count($emailVerify)){
                 return response()->json([
